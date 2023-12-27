@@ -51,14 +51,18 @@ echo "PrivateTmp=true" >> /usr/lib/systemd/system/httpd.service
 echo "[Install]" >> /usr/lib/systemd/system/httpd.service
 echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/httpd.service
 
+cd $src_dir/$mod_jk/native
+./configure --with-apxs=$install_dir/$httpd/bin/apxs
+make && make install
+
 sed -i'' -r -e "/LoadModule rewrite_module modules\/mod_rewrite.so/a\LoadModule jk_module modules\/mod_jk.so" $install_dir/$httpd/conf/httpd.conf
 echo "<IfModule jk_module>" >> $install_dir/$httpd/conf/httpd.conf
 echo "Include conf/mod_jk.conf" >> $install_dir/$httpd/conf/httpd.conf
 echo "</IfModule jk_module>" >> $install_dir/$httpd/conf/httpd.conf
 
-cd $src_dir/$mod_jk/native
-./configure --with-apxs=$install_dir/$httpd/bin/apxs
-make && make install
+wget https://github.com/whchoi78/Source_code/blob/de2c4731eab92bd0894322f54ca5d2a68e7425fb/install_httpd/conf/mod_jk.conf -P $install_dir/$httpd/conf/
+wget https://github.com/whchoi78/Source_code/blob/de2c4731eab92bd0894322f54ca5d2a68e7425fb/install_httpd/conf/uriworkermap.properties -P $install_dir/$httpd/conf/
+wget https://github.com/whchoi78/Source_code/blob/de2c4731eab92bd0894322f54ca5d2a68e7425fb/install_httpd/conf/workers.properties -P $install_dir/$httpd/conf/
 
 systemctl daemon-reload
 systemctl start httpd
