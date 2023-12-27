@@ -51,11 +51,15 @@ echo "PrivateTmp=true" >> /usr/lib/systemd/system/httpd.service
 echo "[Install]" >> /usr/lib/systemd/system/httpd.service
 echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/httpd.service
 
-systemctl daemon-reload
-systemctl start httpd
-systemctl enable httpd
+sed -i'' -r -e "/LoadModule rewrite_module modules\/mod_rewrite.so/a\LoadModule jk_module modules\/mod_jk.so" $install_dir/$httpd/conf/httpd.conf
+echo "<IfModule jk_module>" >> $install_dir/$httpd/conf/httpd.conf
+echo "Include conf/mod_jk.conf" >> $install_dir/$httpd/conf/httpd.conf
+echo "</IfModule jk_module>" >> $install_dir/$httpd/conf/httpd.conf
 
 cd $src_dir/$mod_jk/native
 ./configure --with-apxs=$install_dir/$httpd/bin/apxs
 make && make install
 
+systemctl daemon-reload
+systemctl start httpd
+systemctl enable httpd
