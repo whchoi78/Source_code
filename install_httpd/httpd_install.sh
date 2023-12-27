@@ -1,7 +1,7 @@
 #! /bin/bash
 
 yum -y update
-yum -y make install gcc gcc-c++ pcre-devel expat-devel
+yum -y install make gcc gcc-c++ pcre-devel expat-devel
 
 src_dir=/usr/local/src
 install_dir=/home #edit me
