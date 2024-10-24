@@ -9,14 +9,14 @@ install_dir=/home #edit me
 pcre=pcre-8.45 #edit me
 pcre_version="${pcre#*-}"
 httpd=httpd-2.4.46 #edit me
-apr=apr-1.7.4 #edit me
+apr=apr-1.7.5 #edit me
 apr_util=apr-util-1.6.3 #edit me
 mod_jk=tomcat-connectors-1.2.49-src #edit me
 
 cd $src_dir
 
 wget https://sourceforge.net/projects/pcre/files/pcre/$pcre_version/$pcre.tar.gz -P $src_dir
-wget http://archive.apache.org/dist/httpd/$httpd.tar.gz -P $src_dir
+wget https://archive.apache.org/dist/httpd/$httpd.tar.gz -P $src_dir
 wget https://downloads.apache.org/apr/$apr.tar.gz -P $src_dir
 wget https://downloads.apache.org/apr/$apr_util.tar.gz -P $src_dir
 wget http://archive.apache.org/dist/tomcat/tomcat-connectors/jk/$mod_jk.tar.gz -P $src_dir
@@ -58,11 +58,7 @@ make && make install
 sed -i'' -r -e "/LoadModule rewrite_module modules\/mod_rewrite.so/a\LoadModule jk_module modules\/mod_jk.so" $install_dir/$httpd/conf/httpd.conf
 echo "<IfModule jk_module>" >> $install_dir/$httpd/conf/httpd.conf
 echo "Include conf/mod_jk.conf" >> $install_dir/$httpd/conf/httpd.conf
-echo "</IfModule jk_module>" >> $install_dir/$httpd/conf/httpd.conf
-
-wget https://github.com/whchoi78/Source_code/blob/de2c4731eab92bd0894322f54ca5d2a68e7425fb/install_httpd/conf/mod_jk.conf -P $install_dir/$httpd/conf/
-wget https://github.com/whchoi78/Source_code/blob/de2c4731eab92bd0894322f54ca5d2a68e7425fb/install_httpd/conf/uriworkermap.properties -P $install_dir/$httpd/conf/
-wget https://github.com/whchoi78/Source_code/blob/de2c4731eab92bd0894322f54ca5d2a68e7425fb/install_httpd/conf/workers.properties -P $install_dir/$httpd/conf/
+echo "</IfModule>" >> $install_dir/$httpd/conf/httpd.conf
 
 systemctl daemon-reload
 systemctl start httpd

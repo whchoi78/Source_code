@@ -11,16 +11,16 @@ yum -y update
 yum -y install make gcc gcc-c++ pcre-devel expat-devel
 
 #3) 관련 패키지 다운로드 경로 지정 및 패키지 다운로드 / httpd 설치 경로 지정 / httpd 및 관련 패키지 버전 지정
-src_dir=/usr/local/src/apache-2024 #edit me
-install_dir=/home #edit me
-origin_dir=/home/httpd-2.4.46 #edit me 
+src_dir=/usr/local/src/apache-2024 #사용자 수정 필요
+install_dir=/home #사용자 수정 필요
+origin_dir=/home/httpd-2.4.46 #사용자 수정 필요 
 
-pcre=pcre-8.45 #edit me
+pcre=pcre-8.45 #사용자 수정 필요
 pcre_version="${pcre#*-}"
-httpd=httpd-2.4.59 #edit me
-apr=apr-1.7.5 #edit me
-apr_util=apr-util-1.6.3 #edit me
-mod_jk=tomcat-connectors-1.2.49-src #edit me
+httpd=httpd-2.4.59 #사용자 수정 필요
+apr=apr-1.7.5 #사용자 수정 필요
+apr_util=apr-util-1.6.3 #사용자 수정 필요
+mod_jk=tomcat-connectors-1.2.49-src #사용자 수정 필요
 service_file="/usr/lib/systemd/system/httpd.service"
 
 mkdir $src_dir
@@ -65,6 +65,7 @@ sed -i "s|$origin_dir|$install_dir/$httpd|g" $install_dir/$httpd/conf/httpd.conf
 
 #8) system 등록
 if [ -f "$service_file" ]; then
+cp $service_file $service_file.bak
 echo " " > $service_file
 echo "[Unit]" >> $service_file
 echo "Description=Apache Service" >> $service_file
