@@ -60,8 +60,8 @@ mv $install_dir/$httpd/conf/* $install_dir/$httpd/conf/old/
 cp -r $origin_dir/conf/* $install_dir/$httpd/conf
 fi
 
-#7-2) 이관 받은 httpd 파일 경로 변경(구버전 경로 -> 신버전 경로)
-sed -i "s|$origin_dir|$install_dir/$httpd|g" $install_dir/$httpd/conf/httpd.conf
+#7-2) 이관 받은 httpd 설정 파일 경로 변경(구버전 경로 -> 신버전 경로)
+find $install_dir/$httpd -type f -exec sed -i "s|$origin_dir|$install_dir/$httpd|g" {} \;
 
 #8) system 등록
 if [ -f "$service_file" ]; then
